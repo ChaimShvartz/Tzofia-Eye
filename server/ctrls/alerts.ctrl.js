@@ -36,7 +36,7 @@ export const updateAlert = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
-    const { id } = req.params;
+    const { id } = req.params;    
     const data = req.body;
     const alertUpdated = await alertsRepo.updateAlert({ id }, data);
     if (!alertUpdated)
