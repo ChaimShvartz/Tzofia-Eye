@@ -39,7 +39,7 @@ export const updateAlert = async (
     const { id } = req.params;
     const data = req.body;
     const alertUpdated = await alertsRepo.updateAlert({ id }, data);
-    if (!alert)
+    if (!alertUpdated)
         throw Object.assign(new Error(), {
             status: 404,
             message: "Alert not found",
