@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Alert } from "../types/alert";
 import "./AlertsList.css";
 
@@ -6,10 +7,15 @@ interface AlertListProps {
 }
 
 const AlertsList = ({ alerts }: AlertListProps) => {
+    const navigate = useNavigate();
     const renderItem = (alert: Alert) => {
         const { displayName, priority, id } = alert;
         return (
-            <li id={id} className="alert">
+            <li
+                id={id}
+                className="alert"
+                onClick={() => navigate(`/alert/${id}`)}
+            >
                 <h3>{displayName}</h3>
                 <p>{priority}</p>
             </li>

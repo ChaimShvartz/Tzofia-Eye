@@ -11,17 +11,12 @@ const CreateAlertPage = () => {
     if (isLoading) return <p>טוען...</p>;
     if (error) return <p>{error}</p>;
 
-    const onSubmit = async (form:FormType) => {
-        console.log({form});
-        
-        const alert = await executed(form)
-        if(alert) addAlert(alert)
-    }
-    // if (data) {
-    //     addAlert(data);
-    //     return <p>ההתראה נוספה בהצלחה</p>;
-    // }
+    const onSubmit = async (form: FormType) => {
+        console.log({ form });
 
+        const alert = await executed(form);
+        if (alert) addAlert(alert);
+    };
     return <Form onSubmit={onSubmit} />;
 };
 

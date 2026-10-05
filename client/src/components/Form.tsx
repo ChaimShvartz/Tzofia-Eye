@@ -4,11 +4,14 @@ import "./Form.css";
 
 interface FormProps {
     action?: "create" | "update";
+    initialState?: FormType;
     onSubmit: (form: FormType) => void;
 }
 
-const Form = ({ action = "create", onSubmit }: FormProps) => {
-    const [form, setForm] = useState<FormType>({
+const Form = ({
+    action = "create",
+    onSubmit,
+    initialState = {
         displayName: "",
         description: "",
         priority: "Low",
@@ -16,7 +19,9 @@ const Form = ({ action = "create", onSubmit }: FormProps) => {
         status: "Active",
         lon: 34.78,
         lat: 32.08,
-    });
+    },
+}: FormProps) => {
+    const [form, setForm] = useState<FormType>(initialState);
 
     const onChange = (
         e: React.ChangeEvent<
