@@ -1,5 +1,5 @@
 import type { Alert } from "../types/alert";
-import './AlertsList.css'
+import "./AlertsList.css";
 
 interface AlertListProps {
     alerts: Alert[];
@@ -15,7 +15,11 @@ const AlertsList = ({ alerts }: AlertListProps) => {
             </li>
         );
     };
-    return <ul style={{ width: "50%", listStyle:"none" }}>{alerts.map(renderItem)}</ul>;
+    return (
+        <ul style={{ width: "50%", listStyle: "none" }}>
+            {alerts.map(renderItem)}
+        </ul>
+    );
 };
 
 export default AlertsList;
