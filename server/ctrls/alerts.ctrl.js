@@ -9,7 +9,7 @@ export const getAlerts = async (
     /**@type {Response} */ res,
 ) => {
     const alerts = await alertsRepo.getAlerts();
-    res.json({ data: alerts });
+    res.json({ success: true, data: alerts });
 };
 export const getAlert = async (
     /**@type {Request} */ req,
@@ -22,7 +22,7 @@ export const getAlert = async (
             status: 404,
             message: "Alert not found",
         });
-    res.json({ data: alert });
+    res.json({ success: true, data: alert });
 };
 export const createAlert = async (
     /**@type {Request} */ req,
@@ -30,13 +30,13 @@ export const createAlert = async (
 ) => {
     const alert = req.body;
     const id = await alertsRepo.addAlert(alert);
-    res.status(201).json({ data: { id, ...alert } });
+    res.status(201).json({ success: true, data: { id, ...alert } });
 };
 export const updateAlert = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
-    const { id } = req.params;    
+    const { id } = req.params;
     const data = req.body;
     const alertUpdated = await alertsRepo.updateAlert({ id }, data);
     if (!alertUpdated)
@@ -44,7 +44,7 @@ export const updateAlert = async (
             status: 404,
             message: "Alert not found",
         });
-    res.json({ data: alertUpdated });
+    res.json({ success: true, data: alertUpdated });
 };
 export const deleteAlert = async (
     /**@type {Request} */ req,
@@ -57,5 +57,5 @@ export const deleteAlert = async (
             status: 404,
             message: "Alert not found",
         });
-    res.status(204).send();
+    res.json({ success: true, data: [] });
 };
