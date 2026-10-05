@@ -1,0 +1,18 @@
+form {
+    justify-items: center;
+}
+
+label {
+    margin: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+input,
+select {
+    width: 200px;
+}
+
+textarea {
+    resize: none;
+}
