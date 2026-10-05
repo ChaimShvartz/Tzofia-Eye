@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Form from "../components/Form";
 import useFetch from "../hooks/useFetch";
 import useAlertsStore from "../store/useAlertsStore";
@@ -7,7 +7,7 @@ import type { FormType } from "../types/form";
 
 const UpdateAlertPage = () => {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const alerts = useAlertsStore((state) => state.alerts);
     const setAlerts = useAlertsStore((state) => state.setAlerts);
     const { error, isLoading, executed } = useFetch<Alert>(`/${id}`, "PUT");
@@ -18,6 +18,7 @@ const UpdateAlertPage = () => {
     const onSubmit = async (form: FormType) => {
         const alert = await executed(form);
         if (alert) setAlerts(alerts.filter((a) => a.id !== id));
+        navigate("/");
     };
     return <Form onSubmit={onSubmit} action="update" />;
 };

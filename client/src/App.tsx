@@ -7,6 +7,7 @@ import useFetch from "./hooks/useFetch";
 import type { Alert } from "./types/alert";
 import AlertPage from "./pages/AlertPage";
 import UpdateAlertPage from "./pages/UpdateAlertPage";
+import Header from "./components/Header";
 
 const App = () => {
     const { executed } = useFetch<Alert[]>();
@@ -17,14 +18,20 @@ const App = () => {
         });
     }, []);
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<AlertsPage />} />
-                <Route path="/create-alert" element={<CreateAlertPage />} />
-                <Route path="/update-alert/:id" element={<UpdateAlertPage />} />
-                <Route path="/alert/:id" element={<AlertPage />} />
-            </Routes>
-        </BrowserRouter>
+        <>
+            <BrowserRouter>
+                <Header />
+                <Routes>
+                    <Route path="/" element={<AlertsPage />} />
+                    <Route path="/create-alert" element={<CreateAlertPage />} />
+                    <Route
+                        path="/update-alert/:id"
+                        element={<UpdateAlertPage />}
+                    />
+                    <Route path="/alert/:id" element={<AlertPage />} />
+                </Routes>
+            </BrowserRouter>
+        </>
     );
 };
 
