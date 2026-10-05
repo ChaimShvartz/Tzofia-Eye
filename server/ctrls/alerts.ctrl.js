@@ -1,3 +1,9 @@
+import db from "../db/db.js";
+import { createAlertsRepo } from "../repositories/alerts.repo.js";
+
+const collection = db.collection("alerts");
+const repo = createAlertsRepo(collection);
+
 export const getAlerts = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
