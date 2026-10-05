@@ -6,13 +6,15 @@ import {
     getAlerts,
     updateAlert,
 } from "../ctrls/alerts.ctrl.js";
+import { validation } from "../middlewares/validation.js";
+import { CreatingAlert, UpdatingAlert } from "../models/alert.model.js";
 
 const router = Router();
 
 router.get("/", getAlerts);
 router.get("/:id", getAlert);
-router.post("/", createAlert);
-router.put("/:id", updateAlert);
+router.post("/", validation(CreatingAlert), createAlert);
+router.put("/:id", validation(UpdatingAlert), updateAlert);
 router.delete("/:id", deleteAlert);
 
 export default router;

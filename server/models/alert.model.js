@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const CreateAlert = z.object({
+export const CreatingAlert = z.object({
     displayName: z.string(),
     description: z.string(),
     priority: z.literal(["Low", "Medium", "High", "Critical"]),
@@ -10,4 +10,4 @@ export const CreateAlert = z.object({
     lat: z.number(),
 });
 
-export const UpdatAlert = CreateAlert.partial();
+export const UpdatingAlert = CreatingAlert.partial();
