@@ -12,7 +12,7 @@ export const createUsersRepo = (collection) => {
     const getUser = async ({ id, ...rest }) => {
         const filter = id ? { _id: new ObjectId(id), ...rest } : { ...rest };
         const user = await collection.findOne(filter);
-        if (user) return;
+        if (!user) return;
         return formatId(user);
     };
 

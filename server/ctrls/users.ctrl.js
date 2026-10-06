@@ -37,6 +37,12 @@ export const register = async (
     /**@type {Response} */ res,
 ) => {
     const { password, ...uesr } = req.body;
+    const hasUsername = !!(await usersRepo.getUser({ username }));
+    if (hasUsername)
+        throw Object.assign(new Error(), {
+            status: 409,
+            message: "Username already exists",
+        });
     const id = await usersRepo.addUser({
         ...uesr,
         password: hashPassword(password),
@@ -48,16 +54,15 @@ export const login = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
-    const { password, email } = req.body;
-    const user = await usersRepo.getUser({ email });
+    const { username, password } = req.body;
+    const user = await usersRepo.getUser({ username });
     if (!user)
         throw Object.assign(new Error(), {
             status: 404,
             message: "User not found",
         });
     const { id, role, assignedArena, password: hashedPassword } = user;
-    const isMatch = comparePassword(password, hashedPassword);
-    console.log({ isMatch });
+    const isMatch = await comparePassword(password, hashedPassword);
     if (!isMatch)
         throw Object.assign(new Error(), {
             status: 400,
