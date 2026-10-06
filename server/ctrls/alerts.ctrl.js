@@ -29,6 +29,7 @@ export const createAlert = async (
     /**@type {Response} */ res,
 ) => {
     const alert = req.body;
+    alert.createdAt = new Date();
     const id = await alertsRepo.addAlert(alert);
     res.status(201).json({ success: true, data: { id, ...alert } });
 };
