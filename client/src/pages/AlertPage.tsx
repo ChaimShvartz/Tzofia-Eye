@@ -26,9 +26,9 @@ const AlertPage = () => {
     const alerts = useAlertsStore((state) => state.alerts);
     const { id } = useParams();
     const [alert, setAlert] = useState<Alert | null>(null);
-    const { isLoading, executed } = useFetch<Alert>(`/${id}`);
+    const { isLoading, executed } = useFetch<Alert>(`/alerts/${id}`);
 
-    const { executed: deleteAlert } = useFetch(`/${id}`, "DELETE");
+    const { executed: deleteAlert } = useFetch(`/alerts/${id}`, "DELETE");
 
     useEffect(() => {
         executed().then((alert) => {

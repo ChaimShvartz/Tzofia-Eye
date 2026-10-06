@@ -10,7 +10,7 @@ import UpdateAlertPage from "./pages/UpdateAlertPage";
 import Header from "./components/Header";
 
 const App = () => {
-    const { executed } = useFetch<Alert[]>();
+    const { executed } = useFetch<Alert[]>('alerts');
     const setAlerts = useAlertsStore((state) => state.setAlerts);
     useEffect(() => {
         executed().then((alerts) => {

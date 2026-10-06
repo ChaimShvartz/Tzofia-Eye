@@ -8,7 +8,7 @@ import type { FormType } from "../types/form";
 const CreateAlertPage = () => {
     const navigate = useNavigate();
     const addAlert = useAlertsStore((state) => state.addAlert);
-    const { error, isLoading, executed } = useFetch<Alert>("", "POST");
+    const { error, isLoading, executed } = useFetch<Alert>("/alerts", "POST");
 
     if (isLoading) return <p>טוען...</p>;
     if (error) return <p>{error}</p>;

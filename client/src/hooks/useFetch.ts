@@ -1,14 +1,15 @@
 import { useState } from "react";
 import type { Response } from "../types/response";
 import type { FormType } from "../types/form";
+import type { LoginForm } from "../pages/LoginPage";
 
-const BASE_API = "http://localhost:3001/api/alerts";
+const BASE_API = "http://localhost:3001/api/";
 
 const useFetch = <T>(restUrl: string = "", method = "GET") => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const executed = async (body?: FormType) => {
+    const executed = async (body?: FormType | LoginForm) => {
         setIsLoading(true);
         try {
             const res = await fetch(BASE_API + restUrl, {

@@ -10,7 +10,10 @@ const UpdateAlertPage = () => {
     const navigate = useNavigate();
     const alerts = useAlertsStore((state) => state.alerts);
     const setAlerts = useAlertsStore((state) => state.setAlerts);
-    const { error, isLoading, executed } = useFetch<Alert>(`/${id}`, "PUT");
+    const { error, isLoading, executed } = useFetch<Alert>(
+        `/alerts/${id}`,
+        "PUT",
+    );
 
     if (isLoading) return <p>טוען...</p>;
     if (error) return <p>{error}</p>;
