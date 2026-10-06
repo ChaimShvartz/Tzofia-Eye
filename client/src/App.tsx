@@ -3,7 +3,6 @@ import CreateAlertPage from "./pages/CreateAlertPage";
 import AlertsPage from "./pages/AlertsPage";
 import AlertPage from "./pages/AlertPage";
 import UpdateAlertPage from "./pages/UpdateAlertPage";
-import Header from "./components/Header";
 import AdminPage from "./pages/AdminPage";
 import CreateUserPage from "./pages/CreateUserPage";
 import LoginPage from "./pages/LoginPage";
@@ -30,7 +29,6 @@ const App = () => {
     return (
         <>
             <BrowserRouter>
-                <Header />
                 <Routes>
                     <Route element={<ProtectedRoutes requiredManager={true} />}>
                         <Route

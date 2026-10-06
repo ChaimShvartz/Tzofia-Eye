@@ -5,7 +5,7 @@ interface UsersListProps {
     users: User[];
 }
 
-const rolesDict = {
+export const rolesDict = {
     admin: "מנהל",
     general_user: "חייל כללי",
     arena_user: "חייל זירה",
