@@ -7,13 +7,14 @@ import {
     deleteUser,
 } from "../ctrls/users.ctrl.js";
 import { auth } from "../middlewares/auth.js";
+import { checkAccess } from "../middlewares/checkAccess.js";
 
 const router = Router();
 
-router.get("/users", auth, getUsers);
+router.get("/users", auth, checkAccess("admin"), getUsers);
 router.get("/me", auth, getUser);
-router.post("/register", auth, register);
+router.post("/register", auth, checkAccess("admin"), register);
 router.post("/login", login);
-router.delete("/users/:id", auth, deleteUser);
+router.delete("/users/:id", auth, checkAccess("admin"), deleteUser);
 
 export default router;
