@@ -9,13 +9,16 @@ const useFetch = <T>(restUrl: string = "", method = "GET") => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const executed = async (body?: FormType | LoginForm) => {
+    const executed = async (body?: FormType | LoginForm, token?: string) => {
         setIsLoading(true);
         try {
             const res = await fetch(BASE_API + restUrl, {
                 method,
                 body: JSON.stringify(body),
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
             });
             const resData = (await res.json()) as Response<T>;
             if (!resData.success) return setError(resData.message);
