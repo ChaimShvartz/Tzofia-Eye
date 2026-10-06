@@ -5,6 +5,11 @@ import { rolesDict } from "./UsersList";
 
 const Navbar = () => {
     const { username, role } = useUserStore((state) => state.user) as User;
+    const setUser = useUserStore((state) => state.setUser);
+    const logOut = () => {
+        setUser(null);
+        localStorage.removeItem("token");
+    };
     return (
         <div
             style={{
@@ -27,6 +32,9 @@ const Navbar = () => {
             <h3>
                 {username}({rolesDict[role]})
             </h3>
+            <button type="button" onClick={logOut}>
+                התנתק
+            </button>
         </div>
     );
 };

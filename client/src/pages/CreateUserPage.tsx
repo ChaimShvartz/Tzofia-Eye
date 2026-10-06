@@ -13,7 +13,7 @@ interface CreateUserForm {
 }
 
 const CreateUserPage = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const token = useUserStore((state) => state.token) as string;
     const [form, setForm] = useState<CreateUserForm>({
         username: "",
@@ -32,7 +32,9 @@ const CreateUserPage = () => {
 
     const onSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
-        executed(form, token).then(() => navigate('/admin/dashboard'));
+        if (form.role !== "arena_user")
+            setForm((prev) => ({ ...prev, assignedArena: "All" }));
+        executed(form, token).then(() => navigate("/admin/dashboard"));
     };
     return (
         <form onSubmit={onSubmit}>
@@ -87,8 +89,8 @@ const CreateUserPage = () => {
                         onChange={onChange}
                     >
                         <option value="Center">מרכז</option>
-                        <option value="North "> צפון</option>
-                        <option value="South "> דרום</option>
+                        <option value="North"> צפון</option>
+                        <option value="South"> דרום</option>
                     </select>
                 </label>
             )}

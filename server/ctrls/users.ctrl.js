@@ -48,7 +48,7 @@ export const register = async (
         });
     const id = await usersRepo.addUser({
         ...user,
-        password: hashPassword(password),
+        password: await hashPassword(password),
     });
     res.status(201).json({ success: true, data: { id, ...user } });
 };
