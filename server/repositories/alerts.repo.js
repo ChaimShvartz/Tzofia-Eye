@@ -1,10 +1,11 @@
-import { ObjectId } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 
-export const createAlertsRepo = (collection) => {
+export const createAlertsRepo = (/**@type {Collection}*/ collection) => {
     const formatId = ({ _id, ...rest }) => ({ id: _id.toString(), ...rest });
 
     const getAlerts = async (filter) => {
-        const cursor = collection.find(filter);
+        const projectFields = { displayName: 1, priority: 1, lon: 1, lat: 1 };
+        const cursor = collection.find(filter).project(projectFields);
         const alerts = await cursor.toArray();
         return alerts.map(formatId);
     };
