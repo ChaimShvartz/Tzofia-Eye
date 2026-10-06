@@ -14,8 +14,14 @@ const Navbar = () => {
             }}
         >
             <div style={{ display: "flex", gap: "15px" }}>
-                <NavLink  to={"/"} >דף הבית</NavLink>
+                <NavLink to={"/"}>דף הבית</NavLink>
                 <NavLink to={"/create-alert"}>צור התרעה חדשה</NavLink>
+                {role === "admin" && (
+                    <>
+                        <NavLink to="/admin/dashboard">משתמשים</NavLink>
+                        <NavLink to="/admin/create-user">צור משתמש</NavLink>
+                    </>
+                )}
             </div>
             <h2>עין צופיה</h2>
             <h3>

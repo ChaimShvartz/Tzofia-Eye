@@ -1,4 +1,5 @@
 import useFetch from "../hooks/useFetch";
+import useUserStore from "../store/useUserStore";
 import type { User } from "../types/User";
 
 interface UsersListProps {
@@ -19,6 +20,7 @@ const permissionDict = {
 };
 
 const UsersList = ({ users }: UsersListProps) => {
+    const userId = useUserStore((state) => state.user?.id) as string;
     const renderItem = (user: User) => {
         const { id, username, role, assignedArena } = user;
         const { executed, error, isLoading } = useFetch(
@@ -26,20 +28,29 @@ const UsersList = ({ users }: UsersListProps) => {
             "DELETE",
         );
         return (
-            <li key={id}>
+            <li
+                key={id}
+                style={{ border: "1px solid", width: "30%", margin: "20px" }}
+            >
                 <h3>{username}</h3>
                 <h5>
                     {rolesDict[role]} - {permissionDict[assignedArena]}
                 </h5>
-                <button type="button" onClick={() => executed()}>
-                    מחק משתמש
-                </button>
+                {id !== userId && (
+                    <button type="button" onClick={() => executed()}>
+                        מחק משתמש
+                    </button>
+                )}
                 {isLoading && <p>טוען...</p>}
                 {error && <p>{error}</p>}
             </li>
         );
     };
-    return <ul>{users.map(renderItem)}</ul>;
+    return (
+        <ul style={{ listStyle: "none", justifyItems: "center" }}>
+            {users.map(renderItem)}
+        </ul>
+    );
 };
 
 export default UsersList;
