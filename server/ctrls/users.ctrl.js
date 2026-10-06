@@ -55,14 +55,15 @@ export const login = async (
             status: 404,
             message: "User not found",
         });
-    const { id, role, password: hashedPassword } = user;
-    const isMatch = await comparePassword(password, hashedPassword);
+    const { id, role, assignedArena, password: hashedPassword } = user;
+    const isMatch = comparePassword(password, hashedPassword);
+    console.log({ isMatch });
     if (!isMatch)
         throw Object.assign(new Error(), {
             status: 400,
             message: "Wrong password",
         });
-    const token = generateToken(id, role);
+    const token = generateToken(id, role, assignedArena);
     res.json({ success: true, data: { token } });
 };
 
