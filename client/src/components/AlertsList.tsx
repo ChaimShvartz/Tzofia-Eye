@@ -12,7 +12,7 @@ const AlertsList = ({ alerts }: AlertListProps) => {
         const { displayName, priority, id } = alert;
         return (
             <li
-                id={id}
+                key={id}
                 className="alert"
                 onClick={() => navigate(`/alert/${id}`)}
             >
