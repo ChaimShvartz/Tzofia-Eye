@@ -19,7 +19,7 @@ const App = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) return;
-        executed(null, token)
+        executed(undefined, token)
             .then((user) => {
                 user && setUser(user, token);
                 return token;

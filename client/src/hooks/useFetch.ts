@@ -9,7 +9,7 @@ const useFetch = <T>(restUrl: string = "", method = "GET") => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const executed = async (body?: FormType | LoginForm| null, token?: string) => {
+    const executed = async (body?: FormType | LoginForm, token?: string) => {
         setIsLoading(true);
         try {
             const res = await fetch(BASE_API + restUrl, {
