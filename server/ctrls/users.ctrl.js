@@ -1,6 +1,10 @@
 import db from "../db/db.js";
 import { createUsersRepo } from "../repositories/users.repo.js";
-import { hashPassword } from "../services/auth.services.js";
+import {
+    comparePassword,
+    generateToken,
+    hashPassword,
+} from "../services/auth.services.js";
 
 const collection = db.collection("users");
 const usersRepo = createUsersRepo(collection);
@@ -11,13 +15,13 @@ export const getUsers = async (
 ) => {
     const users = await usersRepo.getUsers();
     const usersForClient = users.map(({ password, ...rest }) => rest);
-    res.json({ success: true, data: usersToClient });
+    res.json({ success: true, data: usersForClient });
 };
 export const getUser = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
-    const { id } = req.params;
+    const { id } = req.user;
     const user = await usersRepo.getUser({ id });
     if (!user)
         throw Object.assign(new Error(), {
@@ -27,7 +31,8 @@ export const getUser = async (
     const { password, ...userForClient } = user;
     res.json({ success: true, data: userForClient });
 };
-export const createUser = async (
+
+export const register = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
@@ -37,6 +42,28 @@ export const createUser = async (
         password: hashPassword(password),
     });
     res.status(201).json({ success: true, data: { id, ...user } });
+};
+
+export const login = async (
+    /**@type {Request} */ req,
+    /**@type {Response} */ res,
+) => {
+    const { password, email } = req.body;
+    const user = await usersRepo.getUser({ email });
+    if (!user)
+        throw Object.assign(new Error(), {
+            status: 404,
+            message: "User not found",
+        });
+    const { id, role, password: hashedPassword } = user;
+    const isMatch = await comparePassword(password, hashedPassword);
+    if (!isMatch)
+        throw Object.assign(new Error(), {
+            status: 400,
+            message: "Wrong password",
+        });
+    const token = generateToken(id, role);
+    res.json({ success: true, data: { token } });
 };
 
 export const deleteUser = async (
