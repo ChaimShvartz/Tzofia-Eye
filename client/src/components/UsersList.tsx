@@ -4,6 +4,7 @@ import type { User } from "../types/User";
 
 interface UsersListProps {
     users: User[];
+    onDelete: (id: string) => void;
 }
 
 export const rolesDict = {
@@ -19,12 +20,13 @@ const permissionDict = {
     South: "דרום",
 };
 
-const UsersList = ({ users }: UsersListProps) => {
+const UsersList = ({ users, onDelete }: UsersListProps) => {
+    const token = useUserStore((state) => state.token) as string;
     const userId = useUserStore((state) => state.user?.id) as string;
     const renderItem = (user: User) => {
         const { id, username, role, assignedArena } = user;
         const { executed, error, isLoading } = useFetch(
-            `auth/users/:${id}`,
+            `auth/users/${id}`,
             "DELETE",
         );
         return (
@@ -37,7 +39,12 @@ const UsersList = ({ users }: UsersListProps) => {
                     {rolesDict[role]} - {permissionDict[assignedArena]}
                 </h5>
                 {id !== userId && (
-                    <button type="button" onClick={() => executed()}>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            executed(undefined, token).then(() => onDelete(id))
+                        }
+                    >
                         מחק משתמש
                     </button>
                 )}

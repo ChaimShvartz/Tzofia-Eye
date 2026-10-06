@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import useFetch from "../hooks/useFetch";
+import useUserStore from "../store/useUserStore";
 import type { User } from "../types/User";
+import { useNavigate } from "react-router-dom";
 
 interface CreateUserForm {
     username: string;
     password: string;
     email: string;
     role: User["role"];
+    assignedArena: User["assignedArena"];
 }
 
 const CreateUserPage = () => {
+    const navigate = useNavigate()
+    const token = useUserStore((state) => state.token) as string;
     const [form, setForm] = useState<CreateUserForm>({
         username: "",
         password: "",
         email: "",
         role: "general_user",
+        assignedArena: "All",
     });
     const { isLoading, error, executed } = useFetch("auth/register", "POST");
     const onChange = (
@@ -23,13 +29,13 @@ const CreateUserPage = () => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
+
+    const onSubmit = (e: React.SubmitEvent) => {
+        e.preventDefault();
+        executed(form, token).then(() => navigate('/admin/dashboard'));
+    };
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                executed(form);
-            }}
-        >
+        <form onSubmit={onSubmit}>
             <label>
                 שם משתמש
                 <input
@@ -51,7 +57,7 @@ const CreateUserPage = () => {
                 />
             </label>
             <label>
-                סיסמה
+                מייל
                 <input
                     type="email"
                     name="email"
@@ -72,6 +78,20 @@ const CreateUserPage = () => {
                     <option value="admin">מנהל</option>
                 </select>
             </label>
+            {form.role === "arena_user" && (
+                <label>
+                    <select
+                        name="assignedArena"
+                        value={form.assignedArena}
+                        required
+                        onChange={onChange}
+                    >
+                        <option value="Center">מרכז</option>
+                        <option value="North "> צפון</option>
+                        <option value="South "> דרום</option>
+                    </select>
+                </label>
+            )}
             <button type="submit">התחבר</button>
             {isLoading && <p>טוען...</p>}
             {error && <p>{error}</p>}

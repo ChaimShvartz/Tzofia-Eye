@@ -13,7 +13,18 @@ const AdminPage = () => {
     }, []);
     if (isLoading) return <p>טוען...</p>;
     if (error) return <p>{error}</p>;
-    return users && <UsersList users={users} />;
+    return (
+        users && (
+            <UsersList
+                users={users}
+                onDelete={(deletedId: string) =>
+                    setUsers((users) =>
+                        users ? users.filter((u) => u.id !== deletedId) : users,
+                    )
+                }
+            />
+        )
+    );
 };
 
 export default AdminPage;

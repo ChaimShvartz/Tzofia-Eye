@@ -36,15 +36,18 @@ export const register = async (
     /**@type {Request} */ req,
     /**@type {Response} */ res,
 ) => {
-    const { password, ...uesr } = req.body;
-    const hasUsername = !!(await usersRepo.getUser({ username }));
-    if (hasUsername)
+    const { password, ...user } = req.body;
+    const { username, email } = user;
+    let duplicate =
+        (await usersRepo.getUser({ username })) ||
+        (await usersRepo.getUser({ email }));
+    if (duplicate)
         throw Object.assign(new Error(), {
             status: 409,
-            message: "Username already exists",
+            message: "Username or email already exists",
         });
     const id = await usersRepo.addUser({
-        ...uesr,
+        ...user,
         password: hashPassword(password),
     });
     res.status(201).json({ success: true, data: { id, ...user } });
