@@ -5,10 +5,12 @@ import useAlertsStore from "../store/useAlertsStore";
 import type { Alert } from "../types/alert";
 import type { FormType } from "../types/form";
 import useUserStore from "../store/useUserStore";
+import { validateAlarm } from "../services/alarm";
 
 const CreateAlertPage = () => {
     const navigate = useNavigate();
     const token = useUserStore((state) => state.token) as string;
+    const alerts = useAlertsStore((state) => state.alerts);
     const addAlert = useAlertsStore((state) => state.addAlert);
     const { error, isLoading, executed } = useFetch<Alert>("alerts", "POST");
 
@@ -18,7 +20,9 @@ const CreateAlertPage = () => {
     const onSubmit = async (form: FormType) => {
         const alert = await executed(form, token);
         if (alert) addAlert(alert);
-        navigate("/");
+
+        const soundAlarm = await validateAlarm(alerts);
+        navigate("/", { state: { soundAlarm } });
     };
     return <Form onSubmit={onSubmit} />;
 };

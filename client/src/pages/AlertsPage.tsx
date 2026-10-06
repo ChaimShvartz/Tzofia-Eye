@@ -7,6 +7,7 @@ import FilterBy from "../components/FilterBy";
 import type { Alert } from "../types/alert";
 import useFetch from "../hooks/useFetch";
 import useUserStore from "../store/useUserStore";
+import { useLocation } from "react-router-dom";
 
 interface FilterState {
     arena: Alert["arena"] | null;
@@ -14,6 +15,7 @@ interface FilterState {
 }
 
 const AlertsPage = () => {
+    const soundAlarm: boolean = useLocation().state?.soundAlarm;
     const { executed } = useFetch<Alert[]>("alerts");
     const setAlerts = useAlertsStore((state) => state.setAlerts);
     const token = useUserStore((state) => state.token) as string;
@@ -66,7 +68,7 @@ const AlertsPage = () => {
                 <FilterBy
                     field="priority"
                     options={[
-                        { display: "הכל", value: "All"  },
+                        { display: "הכל", value: "All" },
                         { display: "נמוכה", value: "Low" },
                         { display: "בינונית", value: "Medium" },
                         { display: "גבוהה", value: "High" },
@@ -77,6 +79,7 @@ const AlertsPage = () => {
                     }
                 />
             </div>
+            {soundAlarm && <div>התראה חמורה - דרוש טיפול מיידי</div>}
             <div style={{ display: "flex" }}>
                 <AlertsList alerts={alerts} />
                 <AlertsMap alerts={alerts} />
