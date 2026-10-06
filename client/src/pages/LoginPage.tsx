@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import useUserStore from "../store/useUserStore";
 import type { User } from "../types/User";
@@ -22,6 +22,7 @@ const LoginPage = () => {
         "auth/login",
         "POST",
     );
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
@@ -53,6 +54,7 @@ const LoginPage = () => {
                     value={form.username}
                     onChange={onChange}
                     required
+                    autoFocus
                 />
             </label>
             <label>

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
 import type { User } from "../types/User";
 import { rolesDict } from "./UsersList";
+import "./Navbar.css";
 
 const Navbar = () => {
     const { username, role } = useUserStore((state) => state.user) as User;
@@ -19,12 +20,20 @@ const Navbar = () => {
             }}
         >
             <div style={{ display: "flex", gap: "15px" }}>
-                <NavLink to={"/"}>דף הבית</NavLink>
-                <NavLink to={"/create-alert"}>צור התרעה חדשה</NavLink>
+                <NavLink className="nav" to={"/"}>
+                    דף הבית
+                </NavLink>
+                <NavLink className="nav" to={"/create-alert"}>
+                    צור התרעה חדשה
+                </NavLink>
                 {role === "admin" && (
                     <>
-                        <NavLink to="/admin/dashboard">משתמשים</NavLink>
-                        <NavLink to="/admin/create-user">צור משתמש</NavLink>
+                        <NavLink className="nav" to="/admin/dashboard">
+                            משתמשים
+                        </NavLink>
+                        <NavLink className="nav" to="/admin/create-user">
+                            צור משתמש
+                        </NavLink>
                     </>
                 )}
             </div>

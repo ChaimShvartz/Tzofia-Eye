@@ -8,6 +8,7 @@ import type { Alert } from "../types/alert";
 import useFetch from "../hooks/useFetch";
 import useUserStore from "../store/useUserStore";
 import { useLocation } from "react-router-dom";
+import type { User } from "../types/User";
 
 interface FilterState {
     arena: Alert["arena"] | null;
@@ -16,6 +17,7 @@ interface FilterState {
 
 const AlertsPage = () => {
     const soundAlarm: boolean = useLocation().state?.soundAlarm;
+    const user = useUserStore((state) => state.user) as User;
     const { executed } = useFetch<Alert[]>("alerts");
     const setAlerts = useAlertsStore((state) => state.setAlerts);
     const token = useUserStore((state) => state.token) as string;
@@ -51,20 +53,22 @@ const AlertsPage = () => {
 
     return (
         <>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex"}}>
                 <SearchBar onChange={setQuery} />
-                <FilterBy
-                    field="arena"
-                    options={[
-                        { display: "הכל", value: "All" },
-                        { display: "מרכז", value: "Center" },
-                        { display: "צפון", value: "North" },
-                        { display: "דרום", value: "South" },
-                    ]}
-                    onChange={(arena: Alert["arena"]) =>
-                        setFilter((prev) => ({ ...prev, arena }))
-                    }
-                />
+                {user.role !== "arena_user" && (
+                    <FilterBy
+                        field="arena"
+                        options={[
+                            { display: "הכל", value: "All" },
+                            { display: "מרכז", value: "Center" },
+                            { display: "צפון", value: "North" },
+                            { display: "דרום", value: "South" },
+                        ]}
+                        onChange={(arena: Alert["arena"]) =>
+                            setFilter((prev) => ({ ...prev, arena }))
+                        }
+                    />
+                )}
                 <FilterBy
                     field="priority"
                     options={[
@@ -80,7 +84,14 @@ const AlertsPage = () => {
                 />
             </div>
             {soundAlarm && (
-                <div style={{ background: "red", width: '200px',alignSelf: 'center', margin: '5px' }}>
+                <div
+                    style={{
+                        background: "red",
+                        width: "200px",
+                        alignSelf: "center",
+                        margin: "5px",
+                    }}
+                >
                     התראה חמורה - דרוש טיפול מיידי
                 </div>
             )}
