@@ -70,7 +70,10 @@ export const login = async (
         });
     const payload = { id, role, assignedArena };
     const token = generateToken(payload);
-    res.json({ success: true, data: { token } });
+    res.json({
+        success: true,
+        data: { user: { id, username, role, assignedArena }, token },
+    });
 };
 
 export const deleteUser = async (
