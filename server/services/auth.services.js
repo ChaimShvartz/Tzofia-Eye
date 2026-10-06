@@ -1,5 +1,5 @@
 import { hash, compare } from "bcrypt";
-import { sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const { SECRET_JWT } = process.env;
 
@@ -8,13 +8,13 @@ export const hashPassword = (password) => {
 };
 
 export const comparePassword = (password, hashadPassword) => {
-    return compare(password, hashPassword);
+    return compare(password, hashadPassword);
 };
 
 export const generateToken = (payload) => {
-    return sign(payload, SECRET_JWT);
+    return jwt.sign(payload, SECRET_JWT);
 };
 
 export const verifyToken = (token) => {
-    return verify(token, SECRET_JWT);
+    return jwt.verify(token, SECRET_JWT);
 };
