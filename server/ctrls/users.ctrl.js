@@ -63,7 +63,9 @@ export const login = async (
             status: 400,
             message: "Wrong password",
         });
-    const token = generateToken(id, role, assignedArena);
+    const payload = { id, role };
+    if (role === "arena_user") payload.assignedArena = assignedArena;
+    const token = generateToken(payload);
     res.json({ success: true, data: { token } });
 };
 

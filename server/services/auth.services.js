@@ -11,7 +11,7 @@ export const comparePassword = (password, hashadPassword) => {
     return compare(password, hashPassword);
 };
 
-export const generateToken = ({...payload}) => {
+export const generateToken = (payload) => {
     return sign(payload, SECRET_JWT);
 };
 
