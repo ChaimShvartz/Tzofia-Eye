@@ -1,8 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import type { Alert } from "../types/alert";
 import useAlertsStore from "../store/useAlertsStore";
+import useUserStore from "../store/useUserStore";
 
 const arenasDict = {
     North: "צפון",
@@ -21,31 +22,39 @@ const statusesDict = {
 };
 
 const AlertPage = () => {
+    const token = useUserStore((state) => state.token) as string;
     const navigate = useNavigate();
     const setAlerts = useAlertsStore((state) => state.setAlerts);
     const alerts = useAlertsStore((state) => state.alerts);
-    const { id } = useParams();
+    const id = useLocation().state as string;
     const [alert, setAlert] = useState<Alert | null>(null);
-    const { isLoading, executed } = useFetch<Alert>(`/alerts/${id}`);
-
-    const { executed: deleteAlert } = useFetch(`/alerts/${id}`, "DELETE");
+    const { isLoading, executed } = useFetch<Alert>(`alerts/${id}`);
+    const { executed: deleteAlert } = useFetch(`alerts/${id}`, "DELETE");
 
     useEffect(() => {
-        executed().then((alert) => {
+        executed(undefined, token).then((alert) => {
             if (alert) setAlert(alert);
         });
     }, []);
 
     const onDelete = () => {
-        deleteAlert()
+        deleteAlert(undefined, token)
             .then(() => setAlerts(alerts.filter((a) => a.id !== id)))
             .then(() => navigate("/"));
     };
 
     if (isLoading) return <p>טוען...</p>;
     if (!alert) return <p>התרעה לא נמצאה!!!</p>;
-    const { displayName, description, priority, arena, status, lon, lat } =
-        alert;
+    const {
+        displayName,
+        description,
+        priority,
+        arena,
+        status,
+        lon,
+        lat,
+        createdAt,
+    } = alert;
     return (
         <>
             <h1>{displayName}</h1>
@@ -55,6 +64,7 @@ const AlertPage = () => {
             <p>{"סטטוס: " + statusesDict[status]}</p>
             <p>{"אורך: " + lon}</p>
             <p>{"רוחב: " + lat}</p>
+            <p>{"נוצרה ב: " + new Date(createdAt).toLocaleString("he")}</p>
             <div
                 style={{
                     display: "flex",
@@ -64,11 +74,10 @@ const AlertPage = () => {
                     marginTop: "40px",
                 }}
             >
-                <button onClick={() => navigate("/")}>חזור למסך הבית</button>
                 <button onClick={onDelete}>מחק התרעה</button>
                 <button
                     onClick={() =>
-                        navigate(`/update-alert/${id}`)
+                        navigate(`/update-alert`, { state: alert })
                     }
                 >
                     עדכן התרעה

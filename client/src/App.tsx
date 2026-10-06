@@ -48,10 +48,10 @@ const App = () => {
                             element={<CreateAlertPage />}
                         />
                         <Route
-                            path="/update-alert/:id"
+                            path="/update-alert"
                             element={<UpdateAlertPage />}
                         />
-                        <Route path="/alert/:id" element={<AlertPage />} />
+                        <Route path="/alert" element={<AlertPage />} />
                     </Route>
 
                     <Route path="/login" element={<LoginPage />} />

@@ -14,7 +14,7 @@ const AlertsList = ({ alerts }: AlertListProps) => {
             <li
                 key={id}
                 className="alert"
-                onClick={() => navigate(`/alert/${id}`)}
+                onClick={() => navigate(`/alert`, {state: id})}
             >
                 <h3>{displayName}</h3>
                 <p>{priority}</p>

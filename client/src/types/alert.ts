@@ -7,4 +7,5 @@ export interface Alert {
     status: "Active" | "Handled";
     lon: number;
     lat: number;
+    createdAt: string
 }
