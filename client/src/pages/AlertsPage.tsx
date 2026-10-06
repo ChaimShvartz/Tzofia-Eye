@@ -79,7 +79,11 @@ const AlertsPage = () => {
                     }
                 />
             </div>
-            {soundAlarm && <div>התראה חמורה - דרוש טיפול מיידי</div>}
+            {soundAlarm && (
+                <div style={{ background: "red", width: '200px',alignSelf: 'center', margin: '5px' }}>
+                    התראה חמורה - דרוש טיפול מיידי
+                </div>
+            )}
             <div style={{ display: "flex" }}>
                 <AlertsList alerts={alerts} />
                 <AlertsMap alerts={alerts} />
