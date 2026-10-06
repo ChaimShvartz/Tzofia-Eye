@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AlertsList from "../components/AlertsList";
 import AlertsMap from "../components/AlertsMap";
 import useAlertsStore from "../store/useAlertsStore";
 import SearchBar from "../components/SearchBar";
 import FilterBy from "../components/FilterBy";
 import type { Alert } from "../types/alert";
+import useFetch from "../hooks/useFetch";
 
 interface FilterState {
     arena: Alert["arena"] | null;
@@ -12,6 +13,14 @@ interface FilterState {
 }
 
 const AlertsPage = () => {
+    const { executed } = useFetch<Alert[]>("alerts");
+    const setAlerts = useAlertsStore((state) => state.setAlerts);
+    useEffect(() => {
+        executed().then((alerts) => {
+            if (alerts) setAlerts(alerts);
+        });
+    }, []);
+
     let alerts = useAlertsStore((state) => state.alerts);
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState<FilterState>({
