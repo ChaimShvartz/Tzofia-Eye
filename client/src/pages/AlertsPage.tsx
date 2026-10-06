@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import FilterBy from "../components/FilterBy";
 import type { Alert } from "../types/alert";
 import useFetch from "../hooks/useFetch";
+import useUserStore from "../store/useUserStore";
 
 interface FilterState {
     arena: Alert["arena"] | null;
@@ -15,8 +16,9 @@ interface FilterState {
 const AlertsPage = () => {
     const { executed } = useFetch<Alert[]>("alerts");
     const setAlerts = useAlertsStore((state) => state.setAlerts);
+    const token = useUserStore((state) => state.token) as string;
     useEffect(() => {
-        executed().then((alerts) => {
+        executed(undefined, token).then((alerts) => {
             if (alerts) setAlerts(alerts);
         });
     }, []);
@@ -29,12 +31,14 @@ const AlertsPage = () => {
     });
 
     const isAranaFiltered = (a: Alert) =>
-        filter.arena ? a.arena === filter.arena : true;
+        [null, "All"].includes(filter.arena) ? true : a.arena === filter.arena;
     const isPriorityFiltered = (a: Alert) =>
-        filter.priority ? a.priority === filter.priority : true;
+        [null, "All"].includes(filter.priority)
+            ? true
+            : a.priority === filter.priority;
 
     alerts = useMemo(() => {
-        return alerts.filter((a) => a.displayName.includes(query));
+        return alerts.filter((a) => a.displayName.includes(query.trim()));
     }, [query, alerts]);
 
     alerts = useMemo(() => {
@@ -50,6 +54,7 @@ const AlertsPage = () => {
                 <FilterBy
                     field="arena"
                     options={[
+                        { display: "הכל", value: "All" },
                         { display: "מרכז", value: "Center" },
                         { display: "צפון", value: "North" },
                         { display: "דרום", value: "South" },
@@ -61,6 +66,7 @@ const AlertsPage = () => {
                 <FilterBy
                     field="priority"
                     options={[
+                        { display: "הכל", value: "All"  },
                         { display: "נמוכה", value: "Low" },
                         { display: "בינונית", value: "Medium" },
                         { display: "גבוהה", value: "High" },

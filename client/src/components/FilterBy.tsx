@@ -10,7 +10,9 @@ interface FilterByProps<T> {
 }
 const FilterBy = <T,>({ field, options, onChange }: FilterByProps<T>) => {
     const renderOption = ({ display, value }: Option) => (
-        <option id={value} value={value}>{display}</option>
+        <option key={value} value={value}>
+            {display}
+        </option>
     );
     return (
         <label>
