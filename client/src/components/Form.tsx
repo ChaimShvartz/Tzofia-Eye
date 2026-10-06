@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { type FormType } from "../types/form";
 import "./Form.css";
+import useUserStore from "../store/useUserStore";
+import type { User } from "../types/User";
 
 interface FormProps {
     action?: "create" | "update";
@@ -21,6 +23,7 @@ const Form = ({
         lat: 32.08,
     },
 }: FormProps) => {
+    const user = useUserStore((state) => state.user) as User;
     const [form, setForm] = useState<FormType>(initialState);
 
     const onChange = (
@@ -50,6 +53,7 @@ const Form = ({
                     value={form.displayName}
                     required={isRequired}
                     onChange={onChange}
+                    autoFocus
                 />
             </label>
             <label>
@@ -77,19 +81,21 @@ const Form = ({
                     <option value="Critical">קריטית</option>
                 </select>
             </label>
-            <label>
-                זירה
-                <select
-                    name="arena"
-                    value={form.arena}
-                    required={isRequired}
-                    onChange={onChange}
-                >
-                    <option value="North">צפון</option>
-                    <option value="South">דרום</option>
-                    <option value="Center">מרכז</option>
-                </select>
-            </label>
+            {user.role !== "arena_user" && (
+                <label>
+                    זירה
+                    <select
+                        name="arena"
+                        value={form.arena}
+                        required={isRequired}
+                        onChange={onChange}
+                    >
+                        <option value="Center">מרכז</option>
+                        <option value="North">צפון</option>
+                        <option value="South">דרום</option>
+                    </select>
+                </label>
+            )}
             <label>
                 סטטוס
                 <select
